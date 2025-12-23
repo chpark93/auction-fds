@@ -1,0 +1,71 @@
+spring:
+  application:
+    name: fds
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5432/fds_db
+    username: fds_user
+    password: fds_password
+    pool:
+      initial-size: 10
+      max-size: 50
+      max-idle-time: 30m
+    properties:
+      autoReconnect: true
+  
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: fds-consumer-group
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+  
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+    deserialization:
+      fail-on-unknown-properties: false
+
+logging:
+  level:
+    root: INFO
+    com.ch.fds: DEBUG
+    org.springframework.data.r2dbc: DEBUG
+    io.r2dbc.postgresql: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+server:
+  port: 8080
+
+fds:
+  db:
+    init:
+      enabled: true
+  kafka:
+    enabled: false
+    topics:
+      auction-events: auction.events
+      payment-events: payment.events
+      trade-events: trade.events
+      detection-results: fds.detection.results
+  rules:
+    bid-sniping:
+      enabled: true
+      critical-threshold-seconds: 30
+      warning-threshold-seconds: 60
+    
+    shill-bidding:
+      enabled: true
+      warning-bid-count: 5
+      critical-bid-count: 10
+    
+    stolen-card:
+      enabled: true
+      critical-payment-count: 5
+      critical-time-window-minutes: 10
+    
+    large-amount:
+      enabled: true
+      absolute-high-amount: 1000000
+      extreme-multiplier: 5.0
