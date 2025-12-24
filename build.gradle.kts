@@ -41,6 +41,12 @@ dependencies {
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
 	
+	// Guava (Bloom Filter)
+	implementation("com.google.guava:guava:33.0.0-jre")
+	
+	// ONNX Runtime (Embedded AI Inference)
+	implementation("com.microsoft.onnxruntime:onnxruntime:1.16.3")
+	
 	// Kotlin
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")

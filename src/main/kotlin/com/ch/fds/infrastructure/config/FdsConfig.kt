@@ -2,8 +2,10 @@ package com.ch.fds.infrastructure.config
 
 import com.ch.fds.core.port.DefaultRiskPolicy
 import com.ch.fds.core.port.DetectionRule
+import com.ch.fds.core.port.ModelInferencePort
 import com.ch.fds.core.port.RiskPolicy
 import com.ch.fds.core.service.RiskAnalysisService
+import com.ch.fds.infrastructure.service.FastBlacklistService
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
@@ -31,11 +33,17 @@ class FdsConfig {
     @Bean
     fun riskAnalysisService(
         rules: List<DetectionRule>,
-        riskPolicy: RiskPolicy
+        riskPolicy: RiskPolicy,
+        blacklistService: FastBlacklistService?,
+        mlScoringService: ModelInferencePort?
+        /*@Autowired(required = false) blacklistService: FastBlacklistService?,
+        @Autowired(required = false) mlScoringService: ModelInferencePort?*/
     ): RiskAnalysisService {
         return RiskAnalysisService(
             rules = rules,
-            riskPolicy = riskPolicy
+            riskPolicy = riskPolicy,
+            blacklistService = blacklistService,
+            mlScoringService = mlScoringService
         )
     }
 }

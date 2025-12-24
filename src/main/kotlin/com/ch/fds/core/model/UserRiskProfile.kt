@@ -135,5 +135,27 @@ data class UserRiskProfile(
 
         return recentPayments.filter { it.occurredAt.isAfter(threshold) }
     }
+    
+    /**
+     * 모든 최근 활동 목록 (Bids + Payments).
+     * Feature Extraction용.
+     */
+    val recentActivities: List<UserActivity>
+        get() = (recentBids as List<UserActivity>) + (recentPayments as List<UserActivity>)
+    
+    /**
+     * 특정 기간 내의 모든 활동 조회.
+     */
+    fun getActivitiesWithin(
+        duration: Duration,
+        referenceTime: Instant = Instant.now()
+    ): List<UserActivity> {
+        val threshold = referenceTime.minus(duration)
+        
+        val bids = recentBids.filter { it.occurredAt.isAfter(threshold) }
+        val payments = recentPayments.filter { it.occurredAt.isAfter(threshold) }
+        
+        return (bids as List<UserActivity>) + (payments as List<UserActivity>)
+    }
 }
 
